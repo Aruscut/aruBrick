@@ -1,28 +1,3 @@
-var move_right = false
-
-var move_left = false
-
-window.addEventListener('keydown', function(event) {
-    if(event.key === 'd') {
-        move_right = true
-        log('keydown', event.key, move_right)
-    }
-  if(event.key === 'a') {
-        move_left = true
-        log('keydown', event.key, move_left)
-    }
-})
-
-window.addEventListener('keyup', function(event) {
-    if(event.key === 'd') {
-        move_right = false
-        log('keyup', event.key, move_right)
-    }
-    if(event.key === 'a') {
-        move_left = false
-        log('keyup', event.key, move_left)
-    }
-})
 
 
 var Paddle = function() {
@@ -35,17 +10,36 @@ var Paddle = function() {
         speed: 10,
     }
 
+    // o.img.onload = function() {
+    //     context.drawImage(o.img, o.x, o.y)
+    // }
     o.moveLeft = function() {
         o.x -= o.speed
     }
     o.moveRight = function() {
         o.x += o.speed
     }
+
     return o
 }
 
 var Guagame = function() {
+    var canvas = e('#game')
+    var context = canvas.getContext('2d')
+    var game = {
+        canvas: canvas,
+        context: context,
+        fps: 30,
+    }
 
+    setInterval(function() {
+        log('timer')
+        game.update()
+        game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
+        game.draw()
+    }, 1000/game.fps)
+
+    return game
 }
 
 var imgFromPath = function(name) {
@@ -56,26 +50,47 @@ var imgFromPath = function(name) {
 }
 
 var __main = function() {
-    var canvas = e('#game')
-    var contex = canvas.getContext('2d')
-    log(contex, canvas)
+    var paddle = Paddle()
+    var game = Guagame()
 
-    var p = Paddle()
-    p.img.onload = function() {
-        contex.drawImage(p.img, p.x, p.y)
+    var move_right = false
+    var move_left = false
+
+    window.addEventListener('keydown', function(event) {
+        if(event.key === 'd') {
+            move_right = true
+            log('keydown', event.key, move_right)
+        }
+        if(event.key === 'a') {
+            move_left = true
+            log('keydown', event.key, move_left)
+        }
+    })
+    window.addEventListener('keyup', function(event) {
+        if(event.key === 'd') {
+            move_right = false
+            log('keyup', event.key, move_right)
+        }
+        if(event.key === 'a') {
+            move_left = false
+            log('keyup', event.key, move_left)
+        }
+    })
+
+    game.update = function() {
+        if(move_right) {
+            paddle.moveRight()
+        }
+        if(move_left) {
+            paddle.moveLeft()
+        }
     }
-    log('main',p.img, p.x, p.y)
-    var fps = 30
-    setInterval(function() {
-        log('timer')
-        if(move_right === true) {
-            //contex.clearRect()
-            p.moveLeft()
-        }
-        if(move_left === true) {
-            p.moveRight()
-        }
-    }, 1000/fps)
+
+    game.draw = function() {
+        game.context.drawImage(paddle.img, paddle.x, paddle.y)
+    }
+    log('main', paddle.img, paddle.x, paddle.y)
+
 }
 
 __main()
