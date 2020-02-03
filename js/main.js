@@ -57,18 +57,22 @@ var Paddle = function() {
         speed: 10,
     }
 
+    o.move = function(x) {
+        if(x < 0) {
+            x = 0
+        }
+        if(x > 900 - o.img.width) {
+            x = 900 - o.img.width
+        }
+        o.x = x
+    }
     o.moveLeft = function() {
         o.x -= o.speed
-        if(o.x < 0) {
-            o.x = 0
-        }
+        o.move(o.x)
     }
     o.moveRight = function() {
         o.x += o.speed
-        if(o.x + o.width > 900) {
-            o.x = 900 - o.width
-        }
-
+        o.move(o.x)
     }
 
     log('Paddle o.width', o.width)
@@ -98,10 +102,10 @@ var Ball = function() {
     }
     o.move = function() {
         if(o.fired) {
-            if(o.x + o.width > 900 || o.x < 0) {
+            if(o.x + o.img.width > 900 || o.x < 0) {
                 o.speed_x = -o.speed_x
             }
-            if(o.y + o.height > 600 || o.y < 0) {
+            if(o.y + o.img.height > 600 || o.y < 0) {
                 o.speed_y = -o.speed_y
             }
             o.x += o.speed_x
@@ -124,16 +128,17 @@ var Brick = function(x, y) {
         height: 18,
         x : x,
         y: y,
-        hp: 2,
+        hp: 1,
         alive: true
     }
 
     o.collide = function(ball) {
-        return collide(ball, o)
+        return collide(ball, o) && o.alive
     }
     o.hit = function() {
         o.hp--
-        if(o.hp === 0) {
+        if(o.hp <= 0) {
+            o.hp = 0
             o.alive = false
         }
     }
@@ -157,22 +162,22 @@ var collide = function(ball, anyObject) {
             y: b.y,
         },
         {
-            x: b.x + b.width,
+            x: b.x + b.img.width,
             y: b.y,
         },
         {
             x: b.x,
-            y: b.y + b.width,
+            y: b.y + b.img.height,
         },
         {
-            x: b.x + b.width,
-            y: b.y + b.width,
+            x: b.x + b.img.width,
+            y: b.y + b.img.height,
         },
     ]
 
     for (var i = 0; i < points.length; i++) {
-        var inX = points[i].x >= o.x && points[i].x <= (o.x + o.width)
-        var inY = points[i].y >= o.y && points[i].y <= (o.y + o.height)
+        var inX = points[i].x >= o.x && points[i].x <= (o.x + o.img.width)
+        var inY = points[i].y >= o.y && points[i].y <= (o.y + o.img.height)
         if(inX && inY) {
             log('collided!', o.width, o.height, 'points', points)
             return true
@@ -245,7 +250,6 @@ var __main = function() {
                 game.drawImage(bricks[i])
             }
         }
-
     }
     //log('main', paddle.img, paddle.x, paddle.y)
 }
