@@ -1,13 +1,13 @@
-var Brick = function(x, y) {
-    var img = imgFromPath('brick0.png')
+var Brick = function(position) {
+    var p = position
 
     var o = {
-        img : img,
+        img : getImg('brick', p.hp),
         width: 50,
         height: 18,
-        x : x,
-        y: y,
-        hp: 1,
+        x : p.x,
+        y: p.y,
+        hp: p.hp,
         alive: true
     }
 
@@ -20,7 +20,18 @@ var Brick = function(x, y) {
             o.hp = 0
             o.alive = false
         }
+        o.img = getImg('brick', o.hp)
     }
 
     return o
+}
+
+var getImg = function(type, hp) {
+    if(hp > 0) {
+        var imgName = `${type}${hp-1}.png`
+        var img = imgFromPath(imgName)
+    } else {
+        var img = imgFromPath(`${type}0.png`)
+    }
+    return img
 }
