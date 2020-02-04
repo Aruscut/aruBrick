@@ -38,45 +38,27 @@ var collide = function(ball, anyObject) {
     return false
 }
 
-var levels = [
-    [
-        {
-            x: 0,
-            y: 100,
-        },
-        {
-            x: 60,
-            y: 100,
-        },
-        {
-            x: 120,
-            y: 100,
-        },
-    ],
-    [
-        {
-            x: 0,
-            y: 100,
-        },
-        {
-            x: 60,
-            y: 100,
-        },
-        {
-            x: 120,
-            y: 100,
-        },
-        {
-            x: 0,
-            y: 150,
-        },
-        {
-            x: 60,
-            y: 150,
-        },
-        {
-            x: 120,
-            y: 170,
-        },
-    ],
-]
+var debugModeEnable = function(enable) {
+    if(!enable) {
+        return
+    }
+    window.addEventListener('keydown', function(event) {
+        if(event.key === 'p') {
+            Pause = !Pause
+        }
+        if (event.key === '1') {
+            bricks = loadLevel(1)
+        }
+        if (event.key === '2') {
+            bricks = loadLevel(2)
+        }
+    })
+
+    //监听fps
+    var inputSpeed = e('#input-speed')
+    inputSpeed.addEventListener('input', function(event) {
+        var input = event.target
+        window.fps = Number(input.value)
+        //log('inputSpeed', window.fps)
+    })
+}

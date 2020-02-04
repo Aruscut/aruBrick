@@ -1,18 +1,5 @@
 var Pause = false
 
-var loadLevel = function(n) {
-    var bricks = []
-    n = n - 1
-    log('levels[n].length', levels[n].length)
-    for (var i = 0; i < levels[n].length; i++) {
-        let x = levels[n][i].x
-        let y = levels[n][i].y
-        let o = Brick(x, y)
-        bricks.push(o)
-    }
-    return bricks
-}
-
 var __main = function() {
     var game = Guagame()
     var paddle = Paddle()
@@ -27,12 +14,6 @@ var __main = function() {
     })
     game.actionsRegister('f', function() {
         ball.fire()
-    })
-
-    window.addEventListener('keydown', function(event) {
-        if(event.key === 'p') {
-            Pause = !Pause
-        }
     })
 
     game.update = function() {
@@ -60,6 +41,9 @@ var __main = function() {
             }
         }
     }
+
+    //debug模式
+    debugModeEnable(true)
     //log('main', paddle.img, paddle.x, paddle.y)
 }
 

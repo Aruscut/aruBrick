@@ -28,8 +28,9 @@ var Guagame = function() {
         game.actions[key] = callback
     }
     //timer
-    setInterval(function() {
-        //log('timer')
+    window.fps = 30
+    
+    var runLoop = function () {
         var actions = Object.keys(game.actions)
         for (var i = 0; i < actions.length; i++) {
             var key = actions[i]
@@ -43,7 +44,30 @@ var Guagame = function() {
         game.update()
         game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
         game.draw()
-    }, 1000/game.fps)
+        setTimeout(function() {
+            runLoop()
+        }, 1000/window.fps)
+    }
+    setTimeout(function() {
+        runLoop()
+    }, 1000/window.fps)
+
+    // setInterval(function() {
+    //     //log('timer')
+    //     var actions = Object.keys(game.actions)
+    //     for (var i = 0; i < actions.length; i++) {
+    //         var key = actions[i]
+    //         if(game.keydowns[key]) {
+    //             game.actions[key]()
+    //         }
+    //     }
+    //     if(Pause) {
+    //         return
+    //     }
+    //     game.update()
+    //     game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
+    //     game.draw()
+    // }, 1000/game.fps)
 
     return game
 }
