@@ -1,6 +1,3 @@
-var log = function(){
-  console.log.apply(console , arguments)
-}
 
 var ajax = function(method, path, headers, data, responseCallback){
   var r = new XMLHttpRequest()

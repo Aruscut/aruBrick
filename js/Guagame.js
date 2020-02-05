@@ -4,8 +4,6 @@ var Guagame = function() {
         keydowns: {},
     }
 
-    game.fps = 30
-
     var canvas = e('#game')
     var context = canvas.getContext('2d')
     game.canvas = canvas
@@ -13,6 +11,12 @@ var Guagame = function() {
     //draw
     game.drawImage = function(o) {
         game.context.drawImage(o.img, o.x, o.y)
+    }
+
+    game.drawScore = function(score) {
+        var temp = `得分 ：${score}`
+        game.context.font = "20px sans-serif"
+        game.context.fillText(temp, 0, 30, )
     }
     // events
     window.addEventListener('keydown', function(event) {
@@ -29,7 +33,7 @@ var Guagame = function() {
     }
     //timer
     window.fps = 30
-    
+
     var runLoop = function () {
         var actions = Object.keys(game.actions)
         for (var i = 0; i < actions.length; i++) {
@@ -37,9 +41,6 @@ var Guagame = function() {
             if(game.keydowns[key]) {
                 game.actions[key]()
             }
-        }
-        if(Pause) {
-            return
         }
         game.update()
         game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)

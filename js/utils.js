@@ -45,12 +45,15 @@ var debugModeEnable = function(enable) {
     window.addEventListener('keydown', function(event) {
         if(event.key === 'p') {
             Pause = !Pause
+            log('Pause', Pause)
         }
         if (event.key === '1') {
             bricks = loadLevel(1)
+            log('debugModeEnable-bricks', bricks)
         }
         if (event.key === '2') {
             bricks = loadLevel(2)
+            log('debugModeEnable-bricks', bricks)
         }
     })
 

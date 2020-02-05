@@ -1,10 +1,14 @@
 var Pause = false
 
+var bricks = []
+
 var __main = function() {
     var game = Guagame()
     var paddle = Paddle()
     var ball = Ball()
-    var bricks = loadLevel(2)
+    bricks = loadLevel(1)
+    //计分
+    var score = 0
 
     game.actionsRegister('d', function() {
         paddle.moveRight()
@@ -17,18 +21,24 @@ var __main = function() {
     })
 
     game.update = function() {
+        if(Pause) {
+            return
+        }
         ball.move()
-        var collided = paddle.collide(ball)
-        if(collided) {
+        //hit paddle
+        if(paddle.collide(ball)) {
             log('update collided')
             ball.reflect()
         }
+        //hit bricks
         for (var i = 0; i < bricks.length; i++) {
-            var hitted = bricks[i].collide(ball)
-            if(hitted) {
+            if(bricks[i].collide(ball)) {
                 log('update hitted bricks', i)
                 bricks[i].hit()
                 ball.reflect()
+                //计分
+                score += 100
+                //log('window.score', window.score)
             }
         }
     }
@@ -40,6 +50,8 @@ var __main = function() {
                 game.drawImage(bricks[i])
             }
         }
+        // log('game.draw', bricks)
+        game.drawScore(score)
     }
 
     //debug模式
